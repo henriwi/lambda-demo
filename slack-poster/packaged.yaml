@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  SlackPoster:
+    Properties:
+      CodeUri: s3://henrik-lambda-demo/7288be765f7314591376134998165ddb
+      Events:
+        GetResource:
+          Properties:
+            Method: post
+            Path: /dinner
+          Type: Api
+      Handler: index.handler
+      Runtime: nodejs8.10
+      Timeout: 20
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
