@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  Bucket:
+    Properties:
+      BucketName: henrik-lambda-demo-images-resize
+    Type: AWS::S3::Bucket
+  ImageResizer:
+    Properties:
+      CodeUri: s3://henrik-lambda-demo/2f94fe9679b007d0ebd9f921d99899c2
+      Events:
+        ImageUploaded:
+          Properties:
+            Bucket:
+              Ref: Bucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                - Name: prefix
+                  Value: images/
+          Type: S3
+      Handler: index.handler
+      Policies: AmazonS3FullAccess
+      Runtime: nodejs8.10
+      Timeout: 20
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31
