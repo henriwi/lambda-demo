@@ -1,0 +1,9 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Resources:
+  HelloWorld:
+    Properties:
+      CodeUri: s3://henrik-lambda-demo/f57b81071cb0f4c719a8ad9cdb1bc23e
+      Handler: index.handler
+      Runtime: nodejs8.10
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

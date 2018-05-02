@@ -8,8 +8,10 @@ Resources:
       Runtime: nodejs8.10
       Timeout: 20
       Events:
-        GetResource:
+        Api:
           Type: Api
           Properties:
             Path: /dinner
             Method: post
+
+            

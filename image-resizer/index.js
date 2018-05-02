@@ -32,13 +32,14 @@ module.exports.handler = (event, context, callback) => {
             const resizedData = gm(data.Body).resize(100);
             gmToBuffer(resizedData)
                 .then(data => {
-                    S3.putObject({ Bucket: bucketName, Key: imageName + "_thumbnail.jpg", Body: data, ContentType: "image/jpg" })
-                        .promise()
-                        .then(() => callback(null, "Resize images saved!"));
+                    S3.putObject({
+                        Bucket: bucketName,
+                        Key: imageName + "_thumbnail.jpg",
+                        Body: data,
+                        ContentType: "image/jpg"
+                    }).promise()
+                        .then(() => callback(null, "Thumbnail saved!"));
                 })
-                .catch(error => {
-                    console.log('Error during resizing', error);
-                    callback(error);
-                });
+                .catch(error => callback(error));
         }).catch(error => callback(error));
 };

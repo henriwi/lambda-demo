@@ -17,14 +17,14 @@ const postToSlack = (message, callback) => {
             }
         ]
     }
-    console.log('Sender respons til Slack: ', body);
+
     callback(null, { statusCode: '200', body: JSON.stringify(body) });
 }
 
 module.exports.handler = (event, context, callback) => {
     console.log('Mottok event: ', JSON.stringify(event));
 
-    fetch(SIO_URL)
+    fetch('https://www.sio.no/mat-og-drikke/spisesteder-og-kaffebarer')
         .then(res => res.text())
         .then(data => {
             const $ = cheerio.load(data);

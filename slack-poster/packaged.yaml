@@ -2,9 +2,9 @@ AWSTemplateFormatVersion: '2010-09-09'
 Resources:
   SlackPoster:
     Properties:
-      CodeUri: s3://henrik-lambda-demo/7288be765f7314591376134998165ddb
+      CodeUri: s3://henrik-lambda-demo/759435584bdc959b30ab1a0ff85729be
       Events:
-        GetResource:
+        Api:
           Properties:
             Method: post
             Path: /dinner
