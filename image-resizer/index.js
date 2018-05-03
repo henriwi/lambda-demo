@@ -20,6 +20,19 @@ const gmToBuffer = data => {
         })
     })
 }
+const saveToS3 = (resizedData, bucketName, imageName, data, callback) => {
+    gmToBuffer(resizedData)
+    .then(data => {
+        S3.putObject({
+            Bucket: bucketName,
+            Key: imageName + "_thumbnail.jpg",
+            Body: data,
+            ContentType: "image/jpg"
+        }).promise()
+            .then(() => callback(null, "Thumbnail saved!"));
+    })
+    .catch(error => callback(error));
+};
 
 module.exports.handler = (event, context, callback) => {
     console.log('Mottok event: ', JSON.stringify(event));
@@ -30,16 +43,6 @@ module.exports.handler = (event, context, callback) => {
     S3.getObject({ Bucket: bucketName, Key: objectKey }).promise()
         .then(data => {
             const resizedData = gm(data.Body).resize(100);
-            gmToBuffer(resizedData)
-                .then(data => {
-                    S3.putObject({
-                        Bucket: bucketName,
-                        Key: imageName + "_thumbnail.jpg",
-                        Body: data,
-                        ContentType: "image/jpg"
-                    }).promise()
-                        .then(() => callback(null, "Thumbnail saved!"));
-                })
-                .catch(error => callback(error));
+            saveToS3(resizedData, bucketName, imageName, data, callback);
         }).catch(error => callback(error));
 };
