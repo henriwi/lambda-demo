@@ -1,0 +1,38 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Resources:
+  ImageAnalyzer:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs8.10
+      MemorySize: 512
+      Policies: 
+          - AmazonS3FullAccess
+          - AmazonRekognitionFullAccess
+          - AmazonDynamoDBFullAccess
+      Timeout: 20
+      Events:
+        ImageUploaded:
+          Type: S3
+          Properties:
+            Bucket: !Ref Bucket
+            Events: s3:ObjectCreated:*
+  Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: "henrikrekognition"
+  ImageLabels:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: image-labels
+      AttributeDefinitions:
+        - AttributeName: image
+          AttributeType: S
+      KeySchema:
+        - AttributeName: image
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+

@@ -1,0 +1,38 @@
+{
+    "Records": [
+        {
+            "eventVersion": "2.0",
+            "eventSource": "aws:s3",
+            "awsRegion": "eu-west-1",
+            "eventTime": "2018-06-22T04:56:10.839Z",
+            "eventName": "ObjectCreated:Put",
+            "userIdentity": {
+                "principalId": "AWS:AIDAJVSFR7T6NOWLF3GQI"
+            },
+            "requestParameters": {
+                "sourceIPAddress": "77.16.217.63"
+            },
+            "responseElements": {
+                "x-amz-request-id": "CA832F244640369B",
+                "x-amz-id-2": "Kg+BsG1EPElpIySEktbHZVClBvbcs7/c5X+QoRZ7Sc37DvgEgTsLS+SQYjyqo4YFQf60xPaVv84="
+            },
+            "s3": {
+                "s3SchemaVersion": "1.0",
+                "configurationId": "8d61f04c-95af-4336-9bad-324a1ce525b4",
+                "bucket": {
+                    "name": "henrikrekognition",
+                    "ownerIdentity": {
+                        "principalId": "AJ6V8VYP2SMQC"
+                    },
+                    "arn": "arn:aws:s3:::henrikrekognition"
+                },
+                "object": {
+                    "key": "adventure-climb-clouds-691668.jpg",
+                    "size": 3568539,
+                    "eTag": "0e92819357c7ef35cdd3d9e0ec7fcaa6",
+                    "sequencer": "005B2C8168285FFC07"
+                }
+            }
+        }
+    ]
+}
