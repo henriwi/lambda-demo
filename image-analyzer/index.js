@@ -31,9 +31,10 @@ const detectLabels = (bucketName, objectKey) => {
     });
 }
 
-const saveToDynamoDB = ((objectKey, labels, callback) => {
+const saveToDynamoDB = (bucketName, objectKey, labels, callback) => {
     const item = {
         image: objectKey,
+        bucketName: bucketName,
         labels: labels
     }
 
@@ -45,7 +46,7 @@ const saveToDynamoDB = ((objectKey, labels, callback) => {
         console.log(res);
         callback(null, "Finished");
     });
-});
+};
 
 module.exports.handler = (event, context, callback) => {
     console.log('Mottok event: ', JSON.stringify(event));
@@ -53,6 +54,6 @@ module.exports.handler = (event, context, callback) => {
     const objectKey = event.Records[0].s3.object.key;
 
     detectLabels(bucketName, objectKey)
-        .then(labels => saveToDynamoDB(objectKey, labels, callback))
+        .then(labels => saveToDynamoDB(bucketName, objectKey, labels, callback))
         .catch(err => callback(null, err))
 };

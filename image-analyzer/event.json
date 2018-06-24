@@ -27,7 +27,7 @@
                     "arn": "arn:aws:s3:::henrikrekognition"
                 },
                 "object": {
-                    "key": "adventure-climb-clouds-691668.jpg",
+                    "key": "david-martin-jr-562547-unsplash.jpg",
                     "size": 3568539,
                     "eTag": "0e92819357c7ef35cdd3d9e0ec7fcaa6",
                     "sequencer": "005B2C8168285FFC07"
