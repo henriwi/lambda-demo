@@ -30,6 +30,7 @@ class App extends Component {
         .map(item => {
           return {
             imageKey: item.image.S,
+            thumbnailImageKey: 'thumbnails/' + item.image.S.split('/')[1],
             bucketName: item.bucketName.S,
             labels: item.labels.L
           }
@@ -46,6 +47,7 @@ class App extends Component {
       return (<div key={image.imageKey}>
         <Image
           key={image.imageKey}
+          thumbnailKey={image.thumbnailImageKey}
           bucketName={image.bucketName}
           imageKey={image.imageKey}
           labels={image.labels} />

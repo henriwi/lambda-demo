@@ -27,8 +27,8 @@ class Image extends Component {
     };
 
     componentDidMount() {
-        const { bucketName, imageKey } = this.props;
-        s3.getObject({ Bucket: bucketName, Key: imageKey }).promise()
+        const { bucketName, thumbnailKey } = this.props;
+        s3.getObject({ Bucket: bucketName, Key: thumbnailKey }).promise()
             .then(data => {
                 console.log(data);
                 this.setState({ url: 'data:image/jpeg;base64,' + this.encode(data.Body) });
@@ -40,11 +40,11 @@ class Image extends Component {
             return <span key={label.S}>{label.S}&nbsp;</span>
         });
 
-        return (<div>
+        return (<div className="image">
             {this.state.url ? (
                 <img width="400px" src={this.state.url} alt={this.props.imageKey} />
             ) : (
-                    <Spinner name="circle" />
+                    <Spinner name="circle" className="spinner"/>
                 )}
             <p>{labels}</p>
         </div>);
