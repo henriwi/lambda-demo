@@ -1,5 +1,9 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
+Parameters:
+  S3BucketName:
+    Type: String
+
 Resources:
   ImageResizer:
     Type: 'AWS::Serverless::Function'
@@ -56,14 +60,14 @@ Resources:
             Resource: !Ref SnsTopic
             Condition:
               ArnLike:
-                aws:SourceArn: !Sub "arn:aws:s3:::henrikrekognition"
+                aws:SourceArn: !Sub "arn:aws:s3:::${S3BucketName}"
             Principal:
               AWS: '*'
 
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: "henrikrekognition"
+      BucketName: !Ref S3BucketName
       NotificationConfiguration:
         TopicConfigurations:
           - Topic: !Ref SnsTopic
