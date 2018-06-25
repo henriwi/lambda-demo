@@ -1,10 +1,25 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: 'AWS::Serverless-2016-10-31'
 Resources:
+  ImageResizer:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: image-resizer.handler
+      Runtime: nodejs8.10
+      Policies: AmazonS3FullAccess
+      Timeout: 20
+      MemorySize: 1024
+  ImageResizerInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref ImageResizer
+      Principal: sns.amazonaws.com
+
   ImageAnalyzer:
     Type: 'AWS::Serverless::Function'
     Properties:
-      Handler: index.handler
+      Handler: image-analyzer.handler
       Runtime: nodejs8.10
       MemorySize: 512
       Policies: 
@@ -12,16 +27,53 @@ Resources:
           - AmazonRekognitionFullAccess
           - AmazonDynamoDBFullAccess
       Timeout: 20
-      Events:
-        ImageUploaded:
-          Type: S3
-          Properties:
-            Bucket: !Ref Bucket
-            Events: s3:ObjectCreated:*
+  ImageAnalyzerInvokePermission:
+    Type: 'AWS::Lambda::Permission'
+    Properties:
+      Action: 'lambda:InvokeFunction'
+      FunctionName: !Ref ImageAnalyzer
+      Principal: sns.amazonaws.com
+
+  SnsTopic:
+    Type: 'AWS::SNS::Topic'
+    Properties:
+      TopicName: 'image-analyzer-topic'
+      Subscription:
+        - Protocol: lambda
+          Endpoint: !GetAtt ImageResizer.Arn
+        - Protocol: lambda
+          Endpoint: !GetAtt ImageAnalyzer.Arn
+  SNSTopicPolicy:
+    Type: 'AWS::SNS::TopicPolicy'
+    Properties:
+      Topics:
+        - !Ref SnsTopic
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action: 'sns:Publish'
+            Resource: !Ref SnsTopic
+            Condition:
+              ArnLike:
+                aws:SourceArn: !Sub "arn:aws:s3:::henrikrekognition"
+            Principal:
+              AWS: '*'
+
   Bucket:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: "henrikrekognition"
+      NotificationConfiguration:
+        TopicConfigurations:
+          - Topic: !Ref SnsTopic
+            Event: 's3:ObjectCreated:*'
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: 'images/'
+
   ImageLabels:
     Type: AWS::DynamoDB::Table
     Properties:

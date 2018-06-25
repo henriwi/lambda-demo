@@ -5,6 +5,13 @@ const rekognition = new AWS.Rekognition();
 const doc = require('dynamodb-doc');
 const dynamo = new doc.DynamoDB();
 
+const getSNSMessageObject = msgString => {
+    var x = msgString.replace(/\\/g, '');
+    var y = x.substring(1,x.length-1);
+    var z = JSON.parse(y);
+    return z;
+ }
+
 const detectLabels = (bucketName, objectKey) => {
     const params = {
         Image: {
@@ -50,8 +57,10 @@ const saveToDynamoDB = (bucketName, objectKey, labels, callback) => {
 
 module.exports.handler = (event, context, callback) => {
     console.log('Mottok event: ', JSON.stringify(event));
-    const bucketName = event.Records[0].s3.bucket.name;
-    const objectKey = event.Records[0].s3.object.key;
+    const snsMsgString = JSON.stringify(event.Records[0].Sns.Message);
+    const snsMsgObject = getSNSMessageObject(snsMsgString);
+    const bucketName = snsMsgObject.Records[0].s3.bucket.name;
+    const objectKey = snsMsgObject.Records[0].s3.object.key;
 
     detectLabels(bucketName, objectKey)
         .then(labels => saveToDynamoDB(bucketName, objectKey, labels, callback))
