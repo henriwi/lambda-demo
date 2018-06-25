@@ -1,14 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Image from './Image';
-import AWS from 'aws-sdk'
-
-AWS.config.region = 'eu-west-1';
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: '',
-});
-
-const dynamodb = new AWS.DynamoDB();
+import {dynamodb} from './AWS';
 
 class App extends Component {
 

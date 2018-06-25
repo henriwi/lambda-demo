@@ -1,16 +1,7 @@
 import React, { Component } from 'react';
-import AWS from 'aws-sdk'
 import Spinner from 'react-spinkit';
 import './Image.css';
-
-AWS.config.region = 'eu-west-1';
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({
-    IdentityPoolId: '',
-});
-
-var s3 = new AWS.S3({
-    apiVersion: '2006-03-01',
-});
+import {s3} from './AWS';
 
 class Image extends Component {
 
