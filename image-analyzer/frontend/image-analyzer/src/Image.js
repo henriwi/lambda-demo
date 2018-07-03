@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Spinner from 'react-spinkit';
 import './Image.css';
-import {s3} from './AWS';
+import { s3 } from './AWS';
 
 class Image extends Component {
 
@@ -35,7 +35,7 @@ class Image extends Component {
             {this.state.url ? (
                 <img width="400px" src={this.state.url} alt={this.props.imageKey} />
             ) : (
-                    <Spinner name="circle" className="spinner"/>
+                    <Spinner name="circle" className="spinner" />
                 )}
             <p>{labels}</p>
         </div>);

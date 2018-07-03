@@ -25,7 +25,7 @@ Resources:
     Properties:
       Handler: image-analyzer.handler
       Runtime: nodejs8.10
-      MemorySize: 512
+      MemorySize: 1024
       Policies: 
           - AmazonS3FullAccess
           - AmazonRekognitionFullAccess
