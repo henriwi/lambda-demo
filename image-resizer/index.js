@@ -25,7 +25,7 @@ const saveToS3 = (resizedData, bucketName, imageName, data, callback) => {
     .then(data => {
         S3.putObject({
             Bucket: bucketName,
-            Key: imageName + "_thumbnail.jpg",
+            Key: "thumbnails/" + imageName,
             Body: data,
             ContentType: "image/jpg"
         }).promise()
@@ -38,7 +38,7 @@ module.exports.handler = (event, context, callback) => {
     console.log('Mottok event: ', JSON.stringify(event));
     const bucketName = event.Records[0].s3.bucket.name;
     const objectKey = event.Records[0].s3.object.key;
-    const imageName = objectKey.split('/').pop().replace(/\.[^/.]+$/, "")
+    const imageName = objectKey.split('/')[1];
 
     S3.getObject({ Bucket: bucketName, Key: objectKey }).promise()
         .then(data => {

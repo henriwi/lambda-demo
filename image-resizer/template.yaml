@@ -8,6 +8,7 @@ Resources:
       Runtime: nodejs8.10
       Policies: AmazonS3FullAccess
       Timeout: 20
+      MemorySize: 1024
       Events:
         ImageUploaded:
           Type: S3
